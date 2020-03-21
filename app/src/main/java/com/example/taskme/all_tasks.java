@@ -123,6 +123,8 @@ class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> {
             intent.putExtra("Assignee Name", taskList.get(getAdapterPosition()).getAssigned());
             intent.putExtra("Deadline", taskList.get(getAdapterPosition()).getDate());
             intent.putExtra("Position", getAdapterPosition());
+
+            //activity1.getActionBar().setTitle("View Task");
             context.startActivity(intent);
 
 

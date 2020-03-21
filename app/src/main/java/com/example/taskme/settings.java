@@ -19,8 +19,7 @@ public class settings extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        //getSupportActionBar().setTitle("Settings");
+
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
         ArrayList<String> arrayItems = new ArrayList<>();
         arrayItems.add("1 day");

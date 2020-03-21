@@ -29,7 +29,7 @@ public class view_tasks extends AppCompatActivity {
         setContentView(R.layout.activity_view_tasks);
         mPrefs = getSharedPreferences("TaskObjects1", Activity.MODE_PRIVATE);
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        //getSupportActionBar().setTitle("View Task");
+        //getActionBar().setTitle("View Task");
 
         completeBtn = findViewById(R.id.completeBtn);
         titleView = findViewById(R.id.taskDisplay);
