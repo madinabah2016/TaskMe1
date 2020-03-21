@@ -54,8 +54,6 @@ public class MainActivity extends AppCompatActivity
         ArrayList<Task> taskList = getMyTaskList();
         int length = taskList.size();
 
-
-
         androidx.appcompat.widget.Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -76,7 +74,7 @@ public class MainActivity extends AppCompatActivity
         TextView taskToDoNum = header.findViewById(R.id.taskToDoNum);
         String numString = length + " Tasks To Do";
         taskToDoNum.setText(numString);
-        name.setText(settings_pref.getString("username", "MyName") + '!');
+        name.setText(settings_pref.getString("username", "MyName!"));
         navigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -137,6 +135,16 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        settings_pref = getSharedPreferences("Settings Pref", Activity.MODE_PRIVATE);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View header = navigationView.getHeaderView(0);
+        TextView name = header.findViewById(R.id.myName);
+        name.setText(settings_pref.getString("username", "MyName!"));
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -27,6 +27,9 @@ public class Task implements Serializable {
     public String getDate() {
         return month+"/"+day+"/"+year;
     }
+    //for sequential ordering of taskList
+    public String getDateSeq() { return year + "" + month + "" + day;
+    }
     public void setAssigned(String a) {
         this.assigned = a;
     }

@@ -4,9 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -47,8 +52,38 @@ public class settings extends AppCompatActivity {
         });
 
         name = (EditText) findViewById(R.id.username);
-        editor.putString("username", name.getText().toString());
+        //editor.putString("username", name.getText().toString() + "!");
+        //editor.putString("username", "Bobby");
+        name.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                editor.putString("username", name.getText().toString() + "!");
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                editor.putString("username", name.getText().toString() + "!");
+            }
+        });
+        /*name.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
+                    editor.putString("username", name.getText().toString());
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(name.getWindowToken(), 0);
+                    return true;}
+                return false;
+            }
+        });
+        */
         editor.commit();
+
 
         Switch toggle = (Switch) findViewById(R.id.switch1);
         final Boolean toggleState = toggle.isChecked();
