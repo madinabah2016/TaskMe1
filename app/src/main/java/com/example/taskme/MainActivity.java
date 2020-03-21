@@ -11,16 +11,25 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Adapter;
+import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity
@@ -31,12 +40,19 @@ public class MainActivity extends AppCompatActivity
     private RecyclerView recView;
     private RecyclerView.Adapter recAdapter;
     private RecyclerView.LayoutManager layoutManager;
+    private SharedPreferences prefs;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        prefs = getSharedPreferences("TaskObjects1", Activity.MODE_PRIVATE);
+
+        ArrayList<Task> taskList = getTaskList();
+        int length = taskList.size();
+
+
 
         androidx.appcompat.widget.Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -46,7 +62,6 @@ public class MainActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
         addTaskFrag = new addTask();
         allTaskFrag = new all_tasks();
         myTaskFrag = new myTasks();
@@ -54,8 +69,29 @@ public class MainActivity extends AppCompatActivity
                 .add(R.id.fragment_container, allTaskFrag).commit();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View header = navigationView.getHeaderView(0);
+        TextView taskToDoNum = header.findViewById(R.id.taskToDoNum);
+        String numString = length + "Tasks To Do";
+        taskToDoNum.setText(numString);
+
         navigationView.setNavigationItemSelectedListener(this);
     }
+
+    public ArrayList<Task> getTaskList() {
+
+        ArrayList<Task> taskList = new ArrayList<Task>();
+        Gson gson = new Gson();
+        String json = prefs.getString("TaskObjects1", "empty");
+        if (json.equals("empty")) {
+            return taskList;
+        }
+        Type type = new TypeToken<List<Task>>() {
+        }.getType();
+        taskList = gson.fromJson(json, type);
+
+        return taskList;
+    }
+
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {

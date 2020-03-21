@@ -7,7 +7,7 @@
     tools:context=".view_tasks">
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/completeBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Complete"
@@ -18,7 +18,7 @@
         app:layout_constraintVertical_bias="0.718" />
 
     <TextView
-        android:id="@+id/assignee"
+        android:id="@+id/assigneeDisplay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Assignee"
@@ -27,16 +27,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.535" />
-
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Title"
-        app:layout_constraintBottom_toTopOf="@+id/assignee"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/deadline"
@@ -49,4 +39,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.382" />
+
+    <TextView
+        android:id="@+id/taskDisplay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="168dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
