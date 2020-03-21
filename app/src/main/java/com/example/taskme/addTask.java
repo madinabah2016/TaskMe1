@@ -38,6 +38,7 @@ public class addTask extends Fragment {
     private Button createBtn;
     private View root;
     private SharedPreferences mPrefs;
+    private SharedPreferences myPrefs;
     private DatePicker datePicker;
     public addTask() {
         // Required empty public constructor
@@ -49,6 +50,7 @@ public class addTask extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mPrefs = getContext().getSharedPreferences("TaskObjects1", Activity.MODE_PRIVATE);
+        myPrefs = getContext().getSharedPreferences("TaskObjects2", Activity.MODE_PRIVATE);
         root = inflater.inflate(R.layout.fragment_add_task, container, false);
         taskNameInput = root.findViewById(R.id.taskNameInput);
         assigneeInput = root.findViewById(R.id.assigneeInput);
@@ -78,16 +80,20 @@ public class addTask extends Fragment {
                 int day = datePicker.getDayOfMonth();
                 int year = datePicker.getYear();
 
-                Task task = new Task(taskName, assignee, 5, month, day, year);
+                Task task = new Task(taskName, assignee, month, day, year);
 
                 ArrayList<Task> taskList;
                 taskList = getTaskList();
                 taskList.add(task);
+                ArrayList<Task> myTaskList = getMyTaskList();
 
-                System.out.println(" TaskList : " + taskList);
+                if (task.getAssigned() == mPrefs.getString("username", "")) {
+                    myTaskList.add(task);
+                }
+                //System.out.println(" TaskList : " + taskList);
 
                 storeTaskList(taskList);
-
+                storeMyTaskList(myTaskList);
                 FragmentManager manager = getActivity().getSupportFragmentManager();
                 FragmentTransaction trans = manager.beginTransaction();
                 trans.remove(new addTask());
@@ -120,6 +126,25 @@ public class addTask extends Fragment {
         String json = gson.toJson(taskList);
         prefsEditor.putString("TaskObjects1", json);
         prefsEditor.commit();
+    }
 
+    public ArrayList<Task> getMyTaskList(){
+        ArrayList<Task> myTaskList= new ArrayList<Task>();
+        Gson gson = new Gson();
+        String json = myPrefs.getString("TaskObjects2", "empty");
+        if(json.equals("empty")){
+            return myTaskList;
+        }
+        Type type = new TypeToken<List<Task>>(){}.getType();
+        myTaskList = gson.fromJson(json, type);
+        return myTaskList;
+    }
+
+    public void storeMyTaskList(ArrayList<Task> taskList){
+        SharedPreferences.Editor prefsEditor = myPrefs.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(taskList);
+        prefsEditor.putString("TaskObjects2", json);
+        prefsEditor.commit();
     }
 }

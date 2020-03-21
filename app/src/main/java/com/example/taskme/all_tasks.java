@@ -47,7 +47,7 @@ public class all_tasks extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_all_tasks, container, false);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("All Task");
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("All Tasks");
         mPrefs = getContext().getSharedPreferences("TaskObjects1", Activity.MODE_PRIVATE);
         context = getContext();
         activity1 = getActivity();
@@ -58,8 +58,7 @@ public class all_tasks extends Fragment {
 
         layoutManager = new LinearLayoutManager(getContext());
         rv.setLayoutManager(layoutManager);
-        List<Task> tasks = new ArrayList<>();
-        tasks = getTaskList();
+        List<Task> tasks = getTaskList();
 
 
         rv.setItemAnimator(new DefaultItemAnimator());
@@ -123,8 +122,6 @@ class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> {
             intent.putExtra("Assignee Name", taskList.get(getAdapterPosition()).getAssigned());
             intent.putExtra("Deadline", taskList.get(getAdapterPosition()).getDate());
             intent.putExtra("Position", getAdapterPosition());
-
-            //activity1.getActionBar().setTitle("View Task");
             context.startActivity(intent);
 
 

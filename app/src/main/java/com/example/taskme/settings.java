@@ -10,21 +10,28 @@ import android.view.View;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.material.internal.NavigationMenu;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 
 public class settings extends AppCompatActivity {
     String days;
-    SharedPreferences mprefs;
+    SharedPreferences mPrefs;
     SharedPreferences.Editor editor;
+    EditText name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-        SharedPreferences mPrefs = getSharedPreferences("Settings Pref", Activity.MODE_PRIVATE);
+        mPrefs = getSharedPreferences("Settings Pref", Activity.MODE_PRIVATE);
         editor = mPrefs.edit();
 
         androidx.appcompat.widget.Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_settings);
@@ -39,6 +46,12 @@ public class settings extends AppCompatActivity {
             }
         });
 
+        name = (EditText) findViewById(R.id.username);
+        editor.putString("username", name.getText().toString());
+        editor.commit();
+
+        Switch toggle = (Switch) findViewById(R.id.switch1);
+        final Boolean toggleState = toggle.isChecked();
 
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
         ArrayList<String> arrayItems = new ArrayList<>();
@@ -52,12 +65,18 @@ public class settings extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 days = parent.getItemAtPosition(position).toString();
+                if (toggleState) {
+                    editor.putString("notification_days", days);
+                } else {
+                    editor.putString("notification_days", "none");
+                }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                //Toast.makeText(parent.getContext(), "Pick a duration", ).show();
+                Toast.makeText(parent.getContext(), "Pick a duration", Toast.LENGTH_SHORT).show();
             }
         });
     }
+
 }

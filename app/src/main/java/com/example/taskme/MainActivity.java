@@ -41,15 +41,17 @@ public class MainActivity extends AppCompatActivity
     private RecyclerView.Adapter recAdapter;
     private RecyclerView.LayoutManager layoutManager;
     private SharedPreferences prefs;
-
+    private SharedPreferences mPrefs;
+    private SharedPreferences settings_pref;
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         prefs = getSharedPreferences("TaskObjects1", Activity.MODE_PRIVATE);
-
-        ArrayList<Task> taskList = getTaskList();
+        mPrefs = getSharedPreferences("TaskObjects2", Activity.MODE_PRIVATE);
+        settings_pref = getSharedPreferences("Settings Pref", Activity.MODE_PRIVATE);
+        ArrayList<Task> taskList = getMyTaskList();
         int length = taskList.size();
 
 
@@ -70,10 +72,11 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         View header = navigationView.getHeaderView(0);
+        TextView name = header.findViewById(R.id.myName);
         TextView taskToDoNum = header.findViewById(R.id.taskToDoNum);
-        String numString = length + "Tasks To Do";
+        String numString = length + " Tasks To Do";
         taskToDoNum.setText(numString);
-
+        name.setText(settings_pref.getString("username", "MyName") + '!');
         navigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -92,6 +95,17 @@ public class MainActivity extends AppCompatActivity
         return taskList;
     }
 
+    public ArrayList<Task> getMyTaskList(){
+        ArrayList<Task> myTaskList= new ArrayList<Task>();
+        Gson gson = new Gson();
+        String json = mPrefs.getString("TaskObjects2", "empty");
+        if(json.equals("empty")){
+            return myTaskList;
+        }
+        Type type = new TypeToken<List<Task>>(){}.getType();
+        myTaskList = gson.fromJson(json, type);
+        return myTaskList;
+    }
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -105,7 +119,6 @@ public class MainActivity extends AppCompatActivity
             transaction.replace(R.id.fragment_container, allTaskFrag);
             transaction.addToBackStack(null);
             transaction.commit();
-            // Handle the camera action
         } else if (id == R.id.myTasks) {
             getSupportActionBar().setTitle("My Tasks");
             transaction.replace(R.id.fragment_container, myTaskFrag);
@@ -139,4 +152,6 @@ public class MainActivity extends AppCompatActivity
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 }

@@ -5,16 +5,13 @@ import java.io.Serializable;
 public class Task implements Serializable {
     private String assigned;
     private String task;
-    private int date;
     private int month;
     private int day;
     private int year;
 
-    public Task(String a, String t, int d, int day, int month, int year)  {
+    public Task(String a, String t, int month, int day, int year)  {
         this.assigned = a;
         this.task = t;
-        this.date = d;
-
         this.day = day;
         this.month = month;
         this.year = year;
@@ -28,7 +25,7 @@ public class Task implements Serializable {
         return this.task;
     }
     public String getDate() {
-        return month+"/"+date+"/"+year;
+        return month+"/"+day+"/"+year;
     }
     public void setAssigned(String a) {
         this.assigned = a;
@@ -36,8 +33,10 @@ public class Task implements Serializable {
     public void setTask(String t) {
         this.task = t;
     }
-    public void setDate(int d) {
-        this.date = d;
+    public void setDate(int month, int day, int year) {
+        this.day = day;
+        this.month = month;
+        this.year = year;
     }
 
     @Override
