@@ -1,6 +1,7 @@
 package com.example.taskme;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -28,8 +29,19 @@ public class view_tasks extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_tasks);
         mPrefs = getSharedPreferences("TaskObjects1", Activity.MODE_PRIVATE);
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        //getActionBar().setTitle("View Task");
+
+        androidx.appcompat.widget.Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_view);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("View Task");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
 
         completeBtn = findViewById(R.id.completeBtn);
         titleView = findViewById(R.id.taskDisplay);

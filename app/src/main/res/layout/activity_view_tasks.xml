@@ -6,6 +6,14 @@
     android:layout_height="match_parent"
     tools:context=".view_tasks">
 
+    <include
+        android:id="@+id/include"
+        layout="@layout/app_bar_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="-62dp"
+        tools:layout_editor_absoluteY="30dp" />
+
     <Button
         android:id="@+id/completeBtn"
         android:layout_width="wrap_content"
