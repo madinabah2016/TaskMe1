@@ -24,12 +24,13 @@ public class view_tasks extends AppCompatActivity {
     private TextView deadlineView;
     private TextView assigneeView;
     private SharedPreferences mPrefs;
+    private SharedPreferences myPrefs;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_tasks);
         mPrefs = getSharedPreferences("TaskObjects1", Activity.MODE_PRIVATE);
-
+        myPrefs = getSharedPreferences("TaskObjects2", Activity.MODE_PRIVATE);
         androidx.appcompat.widget.Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_view);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("View Task");
@@ -59,6 +60,11 @@ public class view_tasks extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 ArrayList<Task> taskList = getTaskList();
+                ArrayList<Task> myTaskList = getMyTaskList();
+                if (myTaskList.contains(taskList.get(position))) {
+                    myTaskList.remove(taskList.get(position));
+                    storeMyTaskList(myTaskList);
+                }
                 taskList.remove(position);
                 storeTaskList(taskList);
 
@@ -90,6 +96,29 @@ public class view_tasks extends AppCompatActivity {
         Gson gson = new Gson();
         String json = gson.toJson(taskList);
         prefsEditor.putString("TaskObjects1", json);
+        prefsEditor.commit();
+
+    }
+
+    public ArrayList<Task> getMyTaskList(){
+
+        ArrayList<Task> taskList= new ArrayList<Task>();
+        Gson gson = new Gson();
+        String json = myPrefs.getString("TaskObjects2", "empty");
+        if(json.equals("empty")){
+            return taskList;
+        }
+        Type type = new TypeToken<List<Task>>(){}.getType();
+        taskList = gson.fromJson(json, type);
+
+        return taskList;
+    }
+
+    public void storeMyTaskList(ArrayList<Task> taskList){
+        SharedPreferences.Editor prefsEditor = myPrefs.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(taskList);
+        prefsEditor.putString("TaskObjects2", json);
         prefsEditor.commit();
 
     }

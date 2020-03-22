@@ -28,8 +28,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 
@@ -41,6 +43,7 @@ public class addTask extends Fragment {
     private Button createBtn;
     private View root;
     private SharedPreferences mPrefs;
+    private SharedPreferences sPrefs;
     private SharedPreferences myPrefs;
     private DatePicker datePicker;
     public addTask() {
@@ -53,6 +56,7 @@ public class addTask extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mPrefs = getContext().getSharedPreferences("TaskObjects1", Activity.MODE_PRIVATE);
+        sPrefs = getContext().getSharedPreferences("Settings Pref", Activity.MODE_PRIVATE);
         myPrefs = getContext().getSharedPreferences("TaskObjects2", Activity.MODE_PRIVATE);
         root = inflater.inflate(R.layout.fragment_add_task, container, false);
         taskNameInput = root.findViewById(R.id.taskNameInput);
@@ -80,7 +84,8 @@ public class addTask extends Fragment {
                 String assignee = assigneeInput.getText().toString();
 
                 if (taskName.equals("")) {
-                    Toast.makeText(getContext(), "Please Enter a Task", Toast.LENGTH_SHORT);
+                    Toast.makeText(getContext(), "Please Enter a Task", Toast.LENGTH_LONG).show();
+                    return;
                 }
                 if (assignee.equals("")) {
                     assignee = "tbd";
@@ -89,14 +94,13 @@ public class addTask extends Fragment {
                 int day = datePicker.getDayOfMonth();
                 int year = datePicker.getYear();
                 //date prior?
-                Task task = new Task(taskName, assignee, month, day, year);
-
+                Task task = new Task(assignee, taskName, month, day, year);
                 ArrayList<Task> taskList;
                 taskList = getTaskList();
                 taskList.add(task);
                 ArrayList<Task> myTaskList = getMyTaskList();
-
-                if (task.getAssigned() == mPrefs.getString("username", "")) {
+                String check = task.getAssigned() + '!';
+                if (check.equalsIgnoreCase(sPrefs.getString("username", ""))) {
                     myTaskList.add(task);
                 }
                 //System.out.println(" TaskList : " + taskList);
@@ -114,6 +118,8 @@ public class addTask extends Fragment {
                         return o1.getDateSeq().compareTo(o2.getDateSeq());
                     }
                 });
+                Collections.reverse(taskList);
+                Collections.reverse(myTaskList);
                 storeTaskList(taskList);
                 storeMyTaskList(myTaskList);
                 FragmentManager manager = getActivity().getSupportFragmentManager();

@@ -52,8 +52,6 @@ public class settings extends AppCompatActivity {
         });
 
         name = (EditText) findViewById(R.id.username);
-        //editor.putString("username", name.getText().toString() + "!");
-        //editor.putString("username", "Bobby");
         name.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -114,4 +112,21 @@ public class settings extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        Spinner spin = (Spinner) findViewById(R.id.spinner);
+        editor.putInt("index", spin.getSelectedItemPosition()).apply();
+        Switch toggle = (Switch) findViewById(R.id.switch1);
+        editor.putBoolean("bool", toggle.isChecked()).apply();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Spinner spin = (Spinner) findViewById(R.id.spinner);
+        spin.setSelection(mPrefs.getInt("index", 0));
+        Switch toggle = (Switch) findViewById(R.id.switch1);
+        toggle.setChecked(mPrefs.getBoolean("bool", false));
+    }
 }

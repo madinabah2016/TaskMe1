@@ -26,7 +26,6 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class myTasks extends Fragment {
 
     RecyclerView.LayoutManager layoutManager;
