@@ -100,10 +100,8 @@ public class addTask extends Fragment {
                 int today_day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
                 if(year < today_year || (year == today_year && month < today_month)
                         || (year == today_year && month < today_month && day < today_day)) {
-                    if (taskName.equals("")) {
-                        Toast.makeText(getContext(), "Please Pick a Future Date", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Please Pick a Future Date", Toast.LENGTH_SHORT).show();
                         return;
-                    }
                 }
                 Task task = new Task(assignee, taskName, month, day, year);
                 ArrayList<Task> taskList;
