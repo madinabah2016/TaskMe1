@@ -34,6 +34,8 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+import static java.util.Calendar.DAY_OF_MONTH;
+
 
 public class addTask extends Fragment {
 
@@ -84,7 +86,7 @@ public class addTask extends Fragment {
                 String assignee = assigneeInput.getText().toString();
 
                 if (taskName.equals("")) {
-                    Toast.makeText(getContext(), "Please Enter a Task", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "Please Enter a Task", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (assignee.equals("")) {
@@ -93,7 +95,16 @@ public class addTask extends Fragment {
                 int month = datePicker.getMonth();
                 int day = datePicker.getDayOfMonth();
                 int year = datePicker.getYear();
-                //date prior?
+                int today_year = Calendar.getInstance().get(Calendar.YEAR);
+                int today_month = Calendar.getInstance().get(Calendar.MONTH);
+                int today_day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+                if(year < today_year || (year == today_year && month < today_month)
+                        || (year == today_year && month < today_month && day < today_day)) {
+                    if (taskName.equals("")) {
+                        Toast.makeText(getContext(), "Please Pick a Future Date", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
                 Task task = new Task(assignee, taskName, month, day, year);
                 ArrayList<Task> taskList;
                 taskList = getTaskList();
