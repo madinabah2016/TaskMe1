@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -83,6 +84,13 @@ public class myTasks extends Fragment {
 
             }
         });
+        NavigationView navView = (NavigationView) getActivity().findViewById(R.id.nav_view);
+        View header = navView.getHeaderView(0);
+        TextView taskToDoNum = header.findViewById(R.id.taskToDoNum);
+        ArrayList<Task> taskList = getMyTaskList();
+        int length = taskList.size();
+        String numString = length + " Tasks To Do";
+        taskToDoNum.setText(numString);
         return root;
     }
 

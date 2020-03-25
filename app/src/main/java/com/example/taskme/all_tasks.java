@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -35,6 +36,7 @@ public class all_tasks extends Fragment {
     RecyclerView.LayoutManager layoutManager;
     RecyclerView.Adapter mAdapter;
     private SharedPreferences mPrefs;
+    private SharedPreferences myPrefs;
     public Context context;
     private Activity activity1;
 
@@ -49,6 +51,7 @@ public class all_tasks extends Fragment {
         View root = inflater.inflate(R.layout.fragment_all_tasks, container, false);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("All Tasks");
         mPrefs = getContext().getSharedPreferences("TaskObjects1", Activity.MODE_PRIVATE);
+        myPrefs = getContext().getSharedPreferences("TaskObjects1", Activity.MODE_PRIVATE);
         context = getContext();
         activity1 = getActivity();
 
@@ -85,7 +88,26 @@ public class all_tasks extends Fragment {
 
             }
         });
+        NavigationView navView = (NavigationView) getActivity().findViewById(R.id.nav_view);
+        View header = navView.getHeaderView(0);
+        TextView taskToDoNum = header.findViewById(R.id.taskToDoNum);
+        ArrayList<Task> taskList = getMyTaskList();
+        int length = taskList.size();
+        String numString = length + " Tasks To Do";
+        taskToDoNum.setText(numString);
         return root;
+    }
+
+    public ArrayList<Task> getMyTaskList(){
+        ArrayList<Task> myTaskList= new ArrayList<Task>();
+        Gson gson = new Gson();
+        String json = myPrefs.getString("TaskObjects2", "empty");
+        if(json.equals("empty")){
+            return myTaskList;
+        }
+        Type type = new TypeToken<List<Task>>(){}.getType();
+        myTaskList = gson.fromJson(json, type);
+        return myTaskList;
     }
 
     public ArrayList<Task> getTaskList(){

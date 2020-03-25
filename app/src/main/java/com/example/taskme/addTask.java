@@ -15,8 +15,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -92,11 +94,11 @@ public class addTask extends Fragment {
                 if (assignee.equals("")) {
                     assignee = "tbd";
                 }
-                int month = datePicker.getMonth();
+                int month = datePicker.getMonth() + 1;
                 int day = datePicker.getDayOfMonth();
                 int year = datePicker.getYear();
                 int today_year = Calendar.getInstance().get(Calendar.YEAR);
-                int today_month = Calendar.getInstance().get(Calendar.MONTH);
+                int today_month = Calendar.getInstance().get(Calendar.MONTH) + 1;
                 int today_day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
                 if(year < today_year || (year == today_year && month < today_month)
                         || (year == today_year && month < today_month && day < today_day)) {
@@ -127,8 +129,7 @@ public class addTask extends Fragment {
                         return o1.getDateSeq().compareTo(o2.getDateSeq());
                     }
                 });
-                //Collections.reverse(taskList);
-                //Collections.reverse(myTaskList);
+
                 storeTaskList(taskList);
                 storeMyTaskList(myTaskList);
 
@@ -176,6 +177,18 @@ public class addTask extends Fragment {
         Type type = new TypeToken<List<Task>>(){}.getType();
         myTaskList = gson.fromJson(json, type);
         return myTaskList;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        NavigationView navView = (NavigationView) getActivity().findViewById(R.id.nav_view);
+        View header = navView.getHeaderView(0);
+        TextView taskToDoNum = header.findViewById(R.id.taskToDoNum);
+        ArrayList<Task> taskList = getMyTaskList();
+        int length = taskList.size();
+        String numString = length + " Tasks To Do";
+        taskToDoNum.setText(numString);
     }
 
     public void storeMyTaskList(ArrayList<Task> taskList){
