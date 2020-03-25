@@ -44,6 +44,6 @@ public class Task implements Serializable {
 
     @Override
     public String toString(){
-        return "Task Name: "+this.task + " Assigne: "+this.assigned;
+        return "Task Name: "+this.task + " Assigne: "+this.assigned +"deadline"+getDate();
     }
 }

@@ -151,6 +151,22 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        settings_pref = getSharedPreferences("Settings Pref", Activity.MODE_PRIVATE);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View header = navigationView.getHeaderView(0);
+        TextView name = header.findViewById(R.id.myName);
+        TextView taskToDoNum = header.findViewById(R.id.taskToDoNum);
+        ArrayList<Task> taskList = getMyTaskList();
+        int length = taskList.size();
+        String numString = length + " Tasks To Do";
+        taskToDoNum.setText(numString);
+        name.setText(settings_pref.getString("username", "MyName!"));
+
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.action_bar_options, menu);
         return true;

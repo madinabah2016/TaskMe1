@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -33,6 +34,7 @@ public class myTasks extends Fragment {
     private SharedPreferences mPrefs;
     public Context context;
     private Activity activity1;
+    private View root;
 
     public myTasks() {
         // Required empty public constructor
@@ -43,7 +45,7 @@ public class myTasks extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View root = inflater.inflate(R.layout.fragment_my_tasks, container, false);
+        root = inflater.inflate(R.layout.fragment_my_tasks, container, false);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("My Tasks");
         mPrefs = getContext().getSharedPreferences("TaskObjects2", Activity.MODE_PRIVATE);
         context = getContext();
@@ -69,10 +71,16 @@ public class myTasks extends Fragment {
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
 
                 ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Add Task");
+                SharedPreferences specialPref = getContext().getSharedPreferences("Special", Activity.MODE_PRIVATE);
+                SharedPreferences.Editor specialPrefEditor = specialPref.edit();
+                specialPrefEditor.putBoolean("flag", true);
+                specialPrefEditor.commit();
+
                 Fragment addTaskFrag = new addTask();
                 transaction.replace(R.id.fragment_container, addTaskFrag);
                 transaction.addToBackStack(null);
                 transaction.commit();
+
             }
         });
         return root;
@@ -92,4 +100,34 @@ public class myTasks extends Fragment {
         return myTaskList;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        RecyclerView rv = (RecyclerView) root.findViewById(R.id.myTasks);
+        rv.setHasFixedSize(true);
+
+        layoutManager = new LinearLayoutManager(getContext());
+        rv.setLayoutManager(layoutManager);
+        List<Task> tasks = getMyTaskList();
+
+        rv.setItemAnimator(new DefaultItemAnimator());
+        mAdapter = new TaskAdapter(tasks, context, activity1);
+        rv.setAdapter(mAdapter);
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        RecyclerView rv = (RecyclerView) root.findViewById(R.id.myTasks);
+        rv.setHasFixedSize(true);
+
+        layoutManager = new LinearLayoutManager(getContext());
+        rv.setLayoutManager(layoutManager);
+        List<Task> tasks = getMyTaskList();
+
+        rv.setItemAnimator(new DefaultItemAnimator());
+        mAdapter = new TaskAdapter(tasks, context, activity1);
+        rv.setAdapter(mAdapter);
+    }
 }

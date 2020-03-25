@@ -29,8 +29,10 @@ public class view_tasks extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_tasks);
+
         mPrefs = getSharedPreferences("TaskObjects1", Activity.MODE_PRIVATE);
         myPrefs = getSharedPreferences("TaskObjects2", Activity.MODE_PRIVATE);
+
         androidx.appcompat.widget.Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_view);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("View Task");
@@ -59,14 +61,34 @@ public class view_tasks extends AppCompatActivity {
         completeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                SharedPreferences specialPref = getSharedPreferences("Special", Activity.MODE_PRIVATE);
+                boolean isMyTask = specialPref.getBoolean("Flag", false);
+
                 ArrayList<Task> taskList = getTaskList();
                 ArrayList<Task> myTaskList = getMyTaskList();
-                if (myTaskList.contains(taskList.get(position))) {
-                    myTaskList.remove(taskList.get(position));
+                if(!isMyTask) {
+                    for (int i = 0; i < myTaskList.size(); i++) {
+                        if (myTaskList.get(i).toString().equals(taskList.get(position).toString())) {
+                            myTaskList.remove(i);
+                            storeMyTaskList(myTaskList);
+                            System.out.println("Hello From View");
+                        }
+                    }
+                    taskList.remove(position);
+                    storeTaskList(taskList);
+                }
+                else{
+                    for (int i = 0; i < taskList.size(); i++) {
+                        if (taskList.get(i).toString().equals(myTaskList.get(position).toString())) {
+                            taskList.remove(i);
+                            storeTaskList(taskList);
+                            System.out.println("Hello From View");
+                        }
+                    }
+                    myTaskList.remove(position);
                     storeMyTaskList(myTaskList);
                 }
-                taskList.remove(position);
-                storeTaskList(taskList);
+
 
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);

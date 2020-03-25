@@ -127,10 +127,11 @@ public class addTask extends Fragment {
                         return o1.getDateSeq().compareTo(o2.getDateSeq());
                     }
                 });
-                Collections.reverse(taskList);
-                Collections.reverse(myTaskList);
+                //Collections.reverse(taskList);
+                //Collections.reverse(myTaskList);
                 storeTaskList(taskList);
                 storeMyTaskList(myTaskList);
+
                 FragmentManager manager = getActivity().getSupportFragmentManager();
                 FragmentTransaction trans = manager.beginTransaction();
                 trans.remove(new addTask());

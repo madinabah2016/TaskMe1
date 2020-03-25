@@ -65,6 +65,10 @@ public class all_tasks extends Fragment {
         mAdapter = new TaskAdapter(tasks, context, activity1);
         rv.setAdapter(mAdapter);
 
+        SharedPreferences specialPref = getContext().getSharedPreferences("Special", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor specialPrefEditor = specialPref.edit();
+        specialPrefEditor.putBoolean("flag", false);
+        specialPrefEditor.commit();
 
         FloatingActionButton fab = root.findViewById(R.id.floatingActionButton);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -77,6 +81,8 @@ public class all_tasks extends Fragment {
                 transaction.replace(R.id.fragment_container, addTaskFrag);
                 transaction.addToBackStack(null);
                 transaction.commit();
+
+
             }
         });
         return root;
