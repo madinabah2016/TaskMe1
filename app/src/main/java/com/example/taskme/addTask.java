@@ -15,8 +15,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -132,6 +134,9 @@ public class addTask extends Fragment {
                 storeTaskList(taskList);
                 storeMyTaskList(myTaskList);
 
+
+                //updateNavigationHeader();
+
                 FragmentManager manager = getActivity().getSupportFragmentManager();
                 FragmentTransaction trans = manager.beginTransaction();
                 trans.remove(new addTask());
@@ -142,6 +147,20 @@ public class addTask extends Fragment {
         });
 
         return root;
+    }
+
+    public void updateNavigationHeader(){
+        SharedPreferences settings_pref = getActivity().getSharedPreferences("TaskObjects2", Activity.MODE_PRIVATE);
+        NavigationView navigationView = (NavigationView) root.findViewById(R.id.nav_view);
+        View header = navigationView.getHeaderView(0);
+        TextView name = header.findViewById(R.id.myName);
+        TextView taskToDoNum = header.findViewById(R.id.taskToDoNum);
+        ArrayList<Task> taskList = getMyTaskList();
+        int length = taskList.size();
+        String numString = length + " Tasks To Do";
+        taskToDoNum.setText(numString);
+        name.setText(settings_pref.getString("username", "MyName!"));
+
     }
 
     public ArrayList<Task> getTaskList(){

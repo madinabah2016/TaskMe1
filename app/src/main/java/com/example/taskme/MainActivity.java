@@ -5,6 +5,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
+import androidx.core.view.MenuItemCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -26,6 +27,8 @@ import android.widget.TextView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
+import org.w3c.dom.Text;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -71,7 +74,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         View header = navigationView.getHeaderView(0);
         TextView name = header.findViewById(R.id.myName);
-        TextView taskToDoNum = header.findViewById(R.id.taskToDoNum);
+        TextView taskToDoNum = (TextView) header.findViewById(R.id.taskToDoNum);
         String numString = length + " Tasks To Do";
         taskToDoNum.setText(numString);
         name.setText(settings_pref.getString("username", "MyName!"));
@@ -142,11 +145,6 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         View header = navigationView.getHeaderView(0);
         TextView name = header.findViewById(R.id.myName);
-        TextView taskToDoNum = header.findViewById(R.id.taskToDoNum);
-        ArrayList<Task> taskList = getMyTaskList();
-        int length = taskList.size();
-        String numString = length + " Tasks To Do";
-        taskToDoNum.setText(numString);
         name.setText(settings_pref.getString("username", "MyName!"));
     }
 
