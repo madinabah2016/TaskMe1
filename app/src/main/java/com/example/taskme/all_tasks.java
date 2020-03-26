@@ -51,7 +51,7 @@ public class all_tasks extends Fragment {
         View root = inflater.inflate(R.layout.fragment_all_tasks, container, false);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("All Tasks");
         mPrefs = getContext().getSharedPreferences("TaskObjects1", Activity.MODE_PRIVATE);
-        myPrefs = getContext().getSharedPreferences("TaskObjects1", Activity.MODE_PRIVATE);
+        myPrefs = getContext().getSharedPreferences("TaskObjects2", Activity.MODE_PRIVATE);
         context = getContext();
         activity1 = getActivity();
 
@@ -91,8 +91,8 @@ public class all_tasks extends Fragment {
         NavigationView navView = (NavigationView) getActivity().findViewById(R.id.nav_view);
         View header = navView.getHeaderView(0);
         TextView taskToDoNum = header.findViewById(R.id.taskToDoNum);
-        ArrayList<Task> taskList = getMyTaskList();
-        int length = taskList.size();
+        ArrayList<Task> mytaskList = getMyTaskList();
+        int length = mytaskList.size();
         String numString = length + " Tasks To Do";
         taskToDoNum.setText(numString);
         return root;

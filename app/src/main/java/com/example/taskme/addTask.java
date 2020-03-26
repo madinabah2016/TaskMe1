@@ -141,7 +141,13 @@ public class addTask extends Fragment {
 
             }
         });
-
+        NavigationView navView = (NavigationView) getActivity().findViewById(R.id.nav_view);
+        View header = navView.getHeaderView(0);
+        TextView taskToDoNum = header.findViewById(R.id.taskToDoNum);
+        ArrayList<Task> taskList = getMyTaskList();
+        int length = taskList.size();
+        String numString = length + " Tasks To Do";
+        taskToDoNum.setText(numString);
         return root;
     }
 
