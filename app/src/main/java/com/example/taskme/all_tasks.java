@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -39,6 +40,7 @@ public class all_tasks extends Fragment {
     private SharedPreferences myPrefs;
     public Context context;
     private Activity activity1;
+    private View root;
 
     public all_tasks() {
         // Required empty public constructor
@@ -48,7 +50,7 @@ public class all_tasks extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View root = inflater.inflate(R.layout.fragment_all_tasks, container, false);
+        root = inflater.inflate(R.layout.fragment_all_tasks, container, false);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("All Tasks");
         mPrefs = getContext().getSharedPreferences("TaskObjects1", Activity.MODE_PRIVATE);
         myPrefs = getContext().getSharedPreferences("TaskObjects2", Activity.MODE_PRIVATE);
@@ -124,6 +126,37 @@ public class all_tasks extends Fragment {
         return taskList;
     }
 
+    
+
+  /*  @Override
+    public void onResume() {
+        super.onResume();
+        SharedPreferences settings_pref = getActivity().getSharedPreferences("TaskObjects2", Activity.MODE_PRIVATE);
+        NavigationView navigationView = (NavigationView) root.findViewById(R.id.nav_view);
+        View header = navigationView.getHeaderView(0);
+        TextView name = header.findViewById(R.id.myName);
+        TextView taskToDoNum = header.findViewById(R.id.taskToDoNum);
+        ArrayList<Task> taskList = getMyTaskList();
+        int length = taskList.size();
+        String numString = length + " Tasks To Do";
+        taskToDoNum.setText(numString);
+        name.setText(settings_pref.getString("username", "MyName!"));
+
+    }
+*/
+    public ArrayList<Task> getMyTaskList(){
+        ArrayList<Task> myTaskList= new ArrayList<Task>();
+        Gson gson = new Gson();
+
+        SharedPreferences myPrefs = getContext().getSharedPreferences("TaskObjects1", Activity.MODE_PRIVATE);
+        String json = myPrefs.getString("TaskObjects2", "empty");
+        if(json.equals("empty")){
+            return myTaskList;
+        }
+        Type type = new TypeToken<List<Task>>(){}.getType();
+        myTaskList = gson.fromJson(json, type);
+        return myTaskList;
+    }
 }
 
 class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> {
